@@ -38,6 +38,35 @@ contract TokenMinter is IERC1155Receiver {
     constructor(address _nftContract) {
         nftContract = NFTMinter(_nftContract);
     }
+
+    /// @notice Converts a bytes32 back to its original string
+    /// @param data The bytes32 value to convert
+    /// @return The original string
+    function _bytes32ToString(bytes32 data) internal pure returns (string memory) {
+        // First convert to bytes
+        bytes memory bytesData = new bytes(32);
+        
+        // Copy bytes32 to bytes array
+        assembly {
+            mstore(add(bytesData, 32), data)
+        }
+        
+        // Find string length (first occurrence of 0)
+        uint length;
+        for (length = 0; length < 32; length++) {
+            if (bytesData[length] == 0) {
+                break;
+            }
+        }
+        
+        // Create a properly sized result
+        bytes memory result = new bytes(length);
+        for (uint i = 0; i < length; i++) {
+            result[i] = bytesData[i];
+        }
+        
+        return string(result);
+    }
     
     /**
      * @dev Creates a new Superchain ERC20 token based on an NFT
@@ -54,7 +83,7 @@ contract TokenMinter is IERC1155Receiver {
         // Check if the caller owns the NFT
         require(nftContract.balanceOf(msg.sender, nftId) > 0, "ERC1155: caller is not token owner");
         
-        string memory nftName = nftContract.tokenName(nftId);
+        string memory nftName = _bytes32ToString(nftContract.s_tokenIdToDomainName(nftId));
         string memory tokenName = string(abi.encodePacked(nftName, " Token"));
         string memory tokenSymbol = string(abi.encodePacked(nftName, "T"));
         
