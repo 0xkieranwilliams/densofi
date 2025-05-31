@@ -22,16 +22,16 @@
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
-    "mongodb": "^6.16.0"
+    "mongodb": "^6.16.0",
+    "viem": "^2.30.5"
   },
   "devDependencies": {
     "@tsconfig/node23": "^23.0.1",
     "@types/express": "^4.17.21",
-    "@types/node": "^22.15.12",
+    "@types/node": "^22.15.29",
     "@types/node-fetch": "^2.6.12",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
     "vitest": "^3.1.3"
   }
 }
-
